@@ -1,0 +1,238 @@
+.landing {
+    min-height: 100vh;
+    position: relative;
+}
+
+/* ─── Hero ────────────────────────────── */
+.hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    padding: 40px 24px;
+}
+
+.hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+.hero-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 40%, rgba(255, 255, 255, 0.03) 0%, transparent 60%);
+}
+
+.hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+    background-size: 80px 80px;
+    animation: gridDrift 25s linear infinite;
+}
+
+@keyframes gridDrift {
+    from {
+        transform: translate(0, 0);
+    }
+
+    to {
+        transform: translate(80px, 80px);
+    }
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 700px;
+}
+
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 100px;
+    padding: 6px 18px;
+    font-size: 0.7rem;
+    color: #aaa;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+}
+
+.hero-badge-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #fff;
+    animation: pulse 2s infinite;
+}
+
+.hero h1 {
+    font-size: 3.2rem;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    line-height: 1.08;
+    margin-bottom: 16px;
+    color: #f0f0f0;
+}
+
+.hero h1 .highlight {
+    color: #ffffff;
+    text-shadow: 0 0 40px rgba(255, 255, 255, 0.15);
+}
+
+.hero-sub {
+    font-size: 1rem;
+    color: #888;
+    line-height: 1.7;
+    margin-bottom: 32px;
+    max-width: 540px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.hero-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* ─── Stats Banner ────────────────────── */
+.landing-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: #1a1a1a;
+    border-top: 1px solid #1a1a1a;
+    border-bottom: 1px solid #1a1a1a;
+}
+
+.landing-stat {
+    background: var(--bg-secondary);
+    padding: 28px 20px;
+    text-align: center;
+    transition: background var(--transition-normal);
+}
+
+.landing-stat:hover {
+    background: var(--bg-tertiary);
+}
+
+.landing-stat-value {
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: #f0f0f0;
+}
+
+.landing-stat-value .accent {
+    color: #999;
+}
+
+.landing-stat-label {
+    font-size: 0.7rem;
+    color: #555;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 4px;
+}
+
+/* ─── Features ────────────────────────── */
+.landing-features {
+    padding: 60px 32px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.landing-features h2 {
+    font-size: 1.6rem;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 8px;
+    letter-spacing: -0.03em;
+}
+
+.landing-features>p {
+    text-align: center;
+    color: #777;
+    margin-bottom: 36px;
+    font-size: 0.9rem;
+}
+
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+}
+
+.feature-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-md);
+    padding: 24px 22px;
+    transition: all var(--transition-normal);
+}
+
+.feature-card:hover {
+    border-color: #333;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.feature-card-icon {
+    font-size: 1.6rem;
+    margin-bottom: 12px;
+}
+
+.feature-card h3 {
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.feature-card p {
+    font-size: 0.8rem;
+    color: #777;
+    line-height: 1.6;
+}
+
+@media (max-width: 1024px) {
+    .feature-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .landing-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 2rem;
+    }
+
+    .hero-sub {
+        font-size: 0.9rem;
+    }
+
+    .feature-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .landing-stats {
+        grid-template-columns: 1fr;
+    }
+}

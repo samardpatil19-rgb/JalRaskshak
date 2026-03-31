@@ -1,0 +1,225 @@
+.rp-layout {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 24px;
+}
+
+.rp-map {
+    height: 520px;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.rp-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.rp-section {
+    background: var(--bg-card);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-md);
+    padding: 20px;
+}
+
+.rp-section h3 {
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+}
+
+.rp-device-toggle {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.rp-device-btn {
+    flex: 1;
+    padding: 10px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-primary);
+    text-align: center;
+    font-size: 0.82rem;
+    font-weight: 600;
+    transition: all var(--transition-fast);
+    cursor: pointer;
+}
+
+.rp-device-btn:hover {
+    border-color: var(--border-hover);
+}
+
+.rp-device-btn.active {
+    background: var(--accent-dim);
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.rp-field-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.rp-field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.rp-field label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.rp-field input,
+.rp-field select {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+}
+
+.rp-waypoints {
+    max-height: 160px;
+    overflow-y: auto;
+}
+
+.rp-waypoint {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    font-size: 0.82rem;
+}
+
+.rp-waypoint:last-child {
+    border-bottom: none;
+}
+
+.rp-wp-num {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--accent-dim);
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.72rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.rp-wp-coords {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    flex: 1;
+}
+
+.rp-wp-remove {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    transition: all var(--transition-fast);
+    cursor: pointer;
+}
+
+.rp-wp-remove:hover {
+    background: var(--danger-dim);
+    color: var(--danger);
+}
+
+.rp-empty {
+    text-align: center;
+    padding: 20px;
+    color: var(--text-dim);
+    font-size: 0.82rem;
+}
+
+.rp-mission-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    background: var(--bg-tertiary);
+    border: 1px dashed var(--border-primary);
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    transition: all var(--transition-fast);
+    cursor: pointer;
+}
+
+.rp-mission-link:hover {
+    border-color: var(--accent);
+    background: var(--accent-dim);
+    color: var(--accent);
+}
+
+.rp-mission-icon {
+    font-size: 1.4rem;
+}
+
+.rp-battery-est {
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    margin-top: 10px;
+}
+
+.rp-battery-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 0;
+    font-size: 0.82rem;
+}
+
+.rp-battery-row span:first-child {
+    color: var(--text-muted);
+}
+
+.rp-battery-row span:last-child {
+    font-family: var(--font-mono);
+    font-weight: 600;
+}
+
+.rp-saved-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.rp-saved-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-sm);
+}
+
+@media (max-width: 1100px) {
+    .rp-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .rp-map {
+        height: 360px;
+    }
+}
