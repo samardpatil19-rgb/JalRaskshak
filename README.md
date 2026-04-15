@@ -12,6 +12,8 @@ Jal Rakshak (जल रक्षक — "Water Protector") is a full-stack comma
 - [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
 - [Getting Started](#getting-started)
+- [Docker Deployment](#docker-deployment)
+- [AWS Deployment](#aws-deployment)
 - [API Reference](#api-reference)
 - [Default Credentials](#default-credentials)
 - [How It Works](#how-it-works)
@@ -138,6 +140,14 @@ India's rivers face severe pollution from garbage, industrial waste, and sewage.
 | bcryptjs | Password hashing |
 | CORS | Cross-origin resource sharing |
 
+### DevOps
+| Technology | Purpose |
+|---|---|
+| Docker | Multi-stage containerization |
+| Docker Compose | Multi-container orchestration |
+| Nginx | Reverse proxy and static file serving |
+| AWS EC2 | Cloud deployment (optional) |
+
 ### Database Schema
 - `users` — id, name, email, password_hash, role, created_at
 - `sensor_readings` — id, ccv_id, temp, ph, tds, do_val, bod, turbidity, timestamp
@@ -187,6 +197,10 @@ JalRakshak/
 │   │   └── About.jsx/css      # Team and technology
 │   └── data/
 │       └── mockData.js        # Client-side mock data
+├── Dockerfile                 # Multi-stage frontend build (React → Nginx)
+├── docker-compose.yml         # Orchestrate frontend + backend
+├── nginx.conf                 # Nginx reverse proxy config
+├── .dockerignore              # Docker build exclusions
 ├── index.html
 ├── package.json
 ├── vite.config.js
@@ -205,8 +219,8 @@ JalRakshak/
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/JalRakshak.git
-cd JalRakshak
+git clone https://github.com/samardpatil19-rgb/JalRaskshak.git
+cd JalRaskshak
 
 # Install dependencies
 npm install
@@ -236,6 +250,117 @@ The website opens at `http://localhost:5173`
 ```bash
 npm run build
 ```
+
+---
+
+## Docker Deployment
+
+Run the entire application with a single command using Docker Compose:
+
+### Prerequisites
+- Docker and Docker Compose installed ([Get Docker](https://docs.docker.com/get-docker/))
+
+### Quick Start
+
+```bash
+# Clone and enter the project
+git clone https://github.com/samardpatil19-rgb/JalRaskshak.git
+cd JalRaskshak
+
+# Build and start both containers
+docker compose up --build -d
+```
+
+The application will be available at `http://localhost`
+
+### Architecture
+
+```
+┌───────────────────────────────────────────────┐
+│              Docker Compose                    │
+│                                                │
+│  ┌──────────────────┐  ┌───────────────────┐  │
+│  │    Frontend       │  │     Backend       │  │
+│  │  (Nginx:80)       │──│  (Express:3001)   │  │
+│  │  React SPA        │  │  REST API         │  │
+│  │  Reverse Proxy    │  │  SQLite DB        │  │
+│  └──────────────────┘  └───────────────────┘  │
+│         :80                   :3001            │
+└───────────────────────────────────────────────┘
+```
+
+- **Frontend container**: Multi-stage build — React compiled with Vite, served by Nginx, `/api/` requests reverse-proxied to the backend
+- **Backend container**: Node.js Alpine running Express, SQLite database persisted via Docker volume
+
+### Commands
+
+```bash
+# Start in background
+docker compose up -d
+
+# View logs
+docker compose logs -f
+
+# Stop
+docker compose down
+
+# Rebuild after code changes
+docker compose up --build -d
+```
+
+---
+
+## AWS Deployment
+
+Deploy Jal Rakshak on AWS EC2 for cloud hosting.
+
+### Step 1: Launch EC2 Instance
+
+1. Go to AWS Console → EC2 → Launch Instance
+2. Choose **Amazon Linux 2023** or **Ubuntu 22.04** (free-tier eligible)
+3. Instance type: **t2.micro** (free tier)
+4. Security Group — allow inbound:
+   - Port 22 (SSH)
+   - Port 80 (HTTP)
+   - Port 443 (HTTPS, optional)
+5. Create/download a key pair (.pem file)
+
+### Step 2: SSH and Install Docker
+
+```bash
+# SSH into your instance
+ssh -i your-key.pem ec2-user@<PUBLIC_IP>
+
+# Install Docker (Amazon Linux)
+sudo yum update -y
+sudo yum install -y docker
+sudo service docker start
+sudo usermod -aG docker ec2-user
+
+# Install Docker Compose
+sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+
+# Log out and back in for group changes
+exit
+ssh -i your-key.pem ec2-user@<PUBLIC_IP>
+```
+
+### Step 3: Deploy
+
+```bash
+# Clone the repo
+git clone https://github.com/samardpatil19-rgb/JalRaskshak.git
+cd JalRaskshak
+
+# Set production JWT secret
+export JWT_SECRET=$(openssl rand -hex 32)
+
+# Build and run
+docker compose up --build -d
+```
+
+Your app is now live at `http://<PUBLIC_IP>`
 
 ---
 

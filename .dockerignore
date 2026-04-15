@@ -1,0 +1,15 @@
+node_modules
+dist
+*.db
+*.db-wal
+*.db-shm
+*.log
+server.log
+server.err
+client.log
+client.err
+.git
+.gitignore
+.vscode
+.idea
+*.md
