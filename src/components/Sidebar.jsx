@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import {
     Home, Monitor, Map, Microscope, BarChart3, AlertTriangle,
-    Leaf, FileText, Users, Menu, LogIn, LogOut
+    Leaf, FileText, Users, Menu, LogIn, LogOut, Cpu
 } from 'lucide-react';
 import './Sidebar.css';
 
@@ -16,6 +16,7 @@ const navItems = [
     { path: '/route-planner', label: 'Route Planner', icon: Map },
     { path: '/ai-vision', label: 'AI Vision Lab', icon: Microscope },
     { path: '/sensors', label: 'Sensor Data', icon: BarChart3 },
+    { path: '/hardware', label: 'Hardware Link', icon: Cpu },
 
     { section: 'Safety' },
     { path: '/alerts', label: 'Alerts & Emergency', icon: AlertTriangle },

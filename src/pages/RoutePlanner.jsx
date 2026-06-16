@@ -4,6 +4,7 @@ import L from 'leaflet';
 import { Plane, Bot, Link2, Upload, Plus, X, Navigation, Save, FolderOpen, Trash2 } from 'lucide-react';
 import { api } from '../api';
 import { useAuth } from '../context/AuthContext';
+import { useSocket } from '../context/SocketContext';
 import 'leaflet/dist/leaflet.css';
 import './RoutePlanner.css';
 
@@ -28,6 +29,8 @@ export default function RoutePlanner() {
     const [savedRoutes, setSavedRoutes] = useState([]);
     const [showSaved, setShowSaved] = useState(false);
     const [saving, setSaving] = useState(false);
+    const [deployingRouteId, setDeployingRouteId] = useState(null);
+    const { fleet } = useSocket();
 
     // Load saved routes
     useEffect(() => {
@@ -98,6 +101,18 @@ export default function RoutePlanner() {
         }
     };
 
+    const handleDeploy = async (routeId, deviceId) => {
+        if (!deviceId) return;
+        try {
+            await api.deployRoute(routeId, deviceId);
+            setDeployingRouteId(null);
+            alert(`Mission deployed successfully to ${deviceId}! Go to the Command Center to track it live.`);
+        } catch (err) {
+            console.error(err);
+            alert('Failed to deploy mission.');
+        }
+    };
+
     const totalDist = waypoints.reduce((sum, wp, i) => {
         if (i === 0) return 0;
         const [lat1, lng1] = waypoints[i - 1];
@@ -144,9 +159,25 @@ export default function RoutePlanner() {
                                 <strong style={{ fontSize: '0.82rem' }}>{r.name}</strong>
                                 <span style={{ fontSize: '0.7rem', color: '#555', marginLeft: 8 }}>{r.device_type.toUpperCase()} · {r.waypoints.length} waypoints</span>
                             </div>
-                            <div style={{ display: 'flex', gap: 6 }}>
-                                <button className="btn btn-outline" style={{ padding: '4px 10px', fontSize: '0.7rem' }} onClick={() => loadRoute(r)}>Load</button>
-                                <button className="btn btn-outline" style={{ padding: '4px 8px', fontSize: '0.7rem' }} onClick={() => deleteRoute(r.id)}><Trash2 size={11} /></button>
+                            <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+                                {deployingRouteId === r.id ? (
+                                    <>
+                                        <select onChange={(e) => handleDeploy(r.id, e.target.value)} defaultValue="" style={{ fontSize: '0.7rem', padding: '4px', background: '#222', border: '1px solid #444', color: '#fff', borderRadius: 4, width: '120px' }}>
+                                            <option value="" disabled>Select {r.device_type.toUpperCase()}...</option>
+                                            {fleet.filter(d => d.type === r.device_type && d.status === 'idle').map(d => (
+                                                <option key={d.id} value={d.id}>{d.id} ({d.battery.toFixed(0)}%)</option>
+                                            ))}
+                                            {fleet.filter(d => d.type === r.device_type && d.status === 'idle').length === 0 && <option disabled>No idle devices</option>}
+                                        </select>
+                                        <button className="btn" style={{ padding: '4px 6px', fontSize: '0.7rem' }} onClick={() => setDeployingRouteId(null)}><X size={11} /></button>
+                                    </>
+                                ) : (
+                                    <>
+                                        <button className="btn btn-accent" style={{ padding: '4px 10px', fontSize: '0.7rem' }} onClick={() => setDeployingRouteId(r.id)}>Deploy</button>
+                                        <button className="btn btn-outline" style={{ padding: '4px 10px', fontSize: '0.7rem' }} onClick={() => loadRoute(r)}>Load</button>
+                                        <button className="btn btn-outline" style={{ padding: '4px 8px', fontSize: '0.7rem', color: '#ff4444', borderColor: '#442222' }} onClick={() => deleteRoute(r.id)}><Trash2 size={11} /></button>
+                                    </>
+                                )}
                             </div>
                         </div>
                     ))}

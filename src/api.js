@@ -24,6 +24,7 @@ async function request(path, options = {}) {
 export const api = {
     // Auth
     login: (email, password) => request('/auth/login', { method: 'POST', body: JSON.stringify({ email, password }) }),
+    googleLogin: (credential) => request('/auth/google', { method: 'POST', body: JSON.stringify({ credential }) }),
     register: (name, email, password) => request('/auth/register', { method: 'POST', body: JSON.stringify({ name, email, password }) }),
     me: () => request('/auth/me'),
 
@@ -39,6 +40,7 @@ export const api = {
     getRoutes: () => request('/routes'),
     getRoute: (id) => request(`/routes/${id}`),
     saveRoute: (data) => request('/routes', { method: 'POST', body: JSON.stringify(data) }),
+    deployRoute: (route_id, device_id) => request('/routes/deploy', { method: 'POST', body: JSON.stringify({ route_id, device_id }) }),
     deleteRoute: (id) => request(`/routes/${id}`, { method: 'DELETE' }),
 
     // Complaints
@@ -55,6 +57,11 @@ export const api = {
         return request(`/alerts${qs ? '?' + qs : ''}`);
     },
     resolveAlert: (id) => request(`/alerts/${id}/resolve`, { method: 'PATCH' }),
+
+    // Devices
+    getDevices: () => request('/devices'),
+    createDevice: (data) => request('/devices', { method: 'POST', body: JSON.stringify(data) }),
+    deleteDevice: (id) => request(`/devices/${id}`, { method: 'DELETE' }),
 
     // Health
     health: () => request('/health'),

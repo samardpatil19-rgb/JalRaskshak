@@ -1,5 +1,8 @@
 import express from 'express';
 import cors from 'cors';
+import http from 'http';
+import { Server } from 'socket.io';
+import { runSimulator } from './simulator.js';
 
 // Initialize database (creates tables on import)
 import './db.js';
@@ -9,9 +12,25 @@ import sensorRoutes from './routes/sensors.js';
 import routeDataRoutes from './routes/routeData.js';
 import complaintRoutes from './routes/complaints.js';
 import alertRoutes from './routes/alerts.js';
+import deviceRoutes from './routes/devices.js';
+import telemetryRoutes from './routes/telemetry.js';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
+
+const server = http.createServer(app);
+const io = new Server(server, {
+    cors: {
+        origin: ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:3000'],
+        methods: ["GET", "POST"],
+        credentials: true
+    }
+});
+
+app.set('io', io);
+
+// Start SITL Simulator
+runSimulator(io);
 
 // Middleware
 app.use(cors({
@@ -36,6 +55,8 @@ app.use('/api/sensors', sensorRoutes);
 app.use('/api/routes', routeDataRoutes);
 app.use('/api/complaints', complaintRoutes);
 app.use('/api/alerts', alertRoutes);
+app.use('/api/devices', deviceRoutes);
+app.use('/api/telemetry', telemetryRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
@@ -48,8 +69,8 @@ app.use((err, req, res, next) => {
     res.status(500).json({ error: 'Internal server error' });
 });
 
-app.listen(PORT, () => {
-    console.log(`\n  Jal Rakshak API Server`);
+server.listen(PORT, () => {
+    console.log(`\n  Jal Rakshak API Server & WebSockets`);
     console.log(`  ─────────────────────`);
     console.log(`  Local:   http://localhost:${PORT}`);
     console.log(`  Health:  http://localhost:${PORT}/api/health`);

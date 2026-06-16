@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LogIn, UserPlus, ArrowRight, Mail, Lock, User } from 'lucide-react';
+import { GoogleLogin } from '@react-oauth/google';
 import { useAuth } from '../context/AuthContext';
 import './Login.css';
 
@@ -11,7 +12,7 @@ export default function Login() {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
-    const { login, register } = useAuth();
+    const { login, googleLogin, register } = useAuth();
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -49,6 +50,30 @@ export default function Login() {
                     <button className={`login-tab ${mode === 'register' ? 'active' : ''}`} onClick={() => { setMode('register'); setError(''); }}>
                         <UserPlus size={12} style={{ marginRight: 4 }} /> Register
                     </button>
+                </div>
+
+                <div style={{ margin: '16px 0', display: 'flex', justifyContent: 'center' }}>
+                    <GoogleLogin
+                        onSuccess={async (credentialResponse) => {
+                            setError('');
+                            setLoading(true);
+                            try {
+                                await googleLogin(credentialResponse.credential);
+                                navigate('/dashboard');
+                            } catch (err) {
+                                setError(err.message);
+                            } finally {
+                                setLoading(false);
+                            }
+                        }}
+                        onError={() => {
+                            setError('Google Login Failed');
+                        }}
+                    />
+                </div>
+
+                <div style={{ textAlign: 'center', marginBottom: '16px', fontSize: '0.9rem', color: '#888' }}>
+                    or continue with email
                 </div>
 
                 {error && <div className="login-error">{error}</div>}

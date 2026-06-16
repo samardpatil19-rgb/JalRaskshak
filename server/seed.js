@@ -99,4 +99,29 @@ if (routeCount === 0) {
     console.log(`  – Routes already exist (${routeCount} rows)`);
 }
 
+// ─── Devices ─────────────────────────────────────────────
+const deviceCount = db.prepare('SELECT COUNT(*) as c FROM devices').get().c;
+if (deviceCount === 0) {
+    const insertDevice = db.prepare(
+        'INSERT INTO devices (id, type, lat, lng, status) VALUES (?, ?, ?, ?, ?)'
+    );
+    const seedDevices = db.transaction(() => {
+        // UAVs
+        insertDevice.run('UAV-01', 'uav', 23.037, 72.573, 'idle');
+        insertDevice.run('UAV-02', 'uav', 23.040, 72.570, 'idle');
+        // UFVs
+        insertDevice.run('UFV-01', 'ufv', 23.032, 72.580, 'idle');
+        insertDevice.run('UFV-02', 'ufv', 23.029, 72.585, 'idle');
+        // CCVs (Command & Control Vehicles — act as sector base stations)
+        insertDevice.run('CCV-01', 'ccv', 23.0225, 72.5714, 'active');
+        insertDevice.run('CCV-02', 'ccv', 23.0350, 72.5800, 'active');
+        insertDevice.run('CCV-03', 'ccv', 23.0480, 72.5900, 'active');
+    });
+    seedDevices();
+    console.log('  ✓ Seeded 7 devices (2 UAV, 2 UFV, 3 CCV)');
+} else {
+    console.log(`  – Devices already exist (${deviceCount} rows)`);
+}
+
 console.log('\n  Database seeded successfully!\n');
+

@@ -12,11 +12,30 @@ router.post('/', authMiddleware, (req, res) => {
         return res.status(400).json({ error: 'device_type, name, and waypoints are required' });
     }
 
-    const result = db.prepare(
-        'INSERT INTO routes (user_id, device_type, name, waypoints, params) VALUES (?, ?, ?, ?, ?)'
-    ).run(req.user.id, device_type, name, JSON.stringify(waypoints), JSON.stringify(params || {}));
+    try {
+        const result = db.prepare(
+            'INSERT INTO routes (user_id, device_type, name, waypoints, params) VALUES (?, ?, ?, ?, ?)'
+        ).run(req.user.id, device_type, name, JSON.stringify(waypoints), JSON.stringify(params || {}));
 
-    res.status(201).json({ id: result.lastInsertRowid });
+        res.status(201).json({ id: result.lastInsertRowid });
+    } catch (e) {
+        res.status(500).json({ error: 'Failed to insert route' });
+    }
+});
+
+// POST /api/routes/deploy — Start a mission mapping a route to a drone
+router.post('/deploy', authMiddleware, (req, res) => {
+    const { route_id, device_id } = req.body;
+    if (!route_id || !device_id) return res.status(400).json({ error: 'route_id and device_id are required' });
+
+    const device = db.prepare('SELECT status FROM devices WHERE id = ?').get(device_id);
+    if (!device) return res.status(404).json({ error: 'Device not found' });
+    if (device.status !== 'idle') return res.status(400).json({ error: 'Device is currently active.' });
+
+    const result = db.prepare('INSERT INTO missions (device_id, route_id) VALUES (?, ?)').run(device_id, route_id);
+    db.prepare("UPDATE devices SET status = 'active' WHERE id = ?").run(device_id);
+
+    res.json({ success: true, mission_id: result.lastInsertRowid });
 });
 
 // GET /api/routes — list saved routes (protected)

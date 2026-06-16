@@ -1,0 +1,329 @@
+/* ── Hardware Integration Page ─── */
+
+.hw-status-bar {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 12px 18px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-md);
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+.hw-status-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+}
+
+.hw-test-result {
+    padding: 10px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 0.78rem;
+    margin-bottom: 16px;
+    font-family: var(--font-mono);
+}
+
+.hw-test-result.success {
+    background: rgba(0, 230, 118, 0.08);
+    border: 1px solid rgba(0, 230, 118, 0.2);
+    color: #00e676;
+}
+
+.hw-test-result.error {
+    background: rgba(255, 23, 68, 0.08);
+    border: 1px solid rgba(255, 23, 68, 0.2);
+    color: #ff1744;
+}
+
+.hw-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.hw-panel {
+    background: var(--bg-card);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.hw-panel-header {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border-primary);
+}
+
+.hw-panel-header h3 {
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Device List */
+.hw-device-list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.hw-empty {
+    padding: 24px 18px;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    text-align: center;
+    line-height: 1.6;
+}
+
+.hw-device-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    transition: background 0.2s;
+    font-size: 0.8rem;
+}
+
+.hw-device-row:hover {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.hw-device-row:last-child {
+    border-bottom: none;
+}
+
+.hw-device-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.hw-device-indicator.online {
+    background: #00e676;
+    box-shadow: 0 0 8px rgba(0, 230, 118, 0.5);
+    animation: pulse 2s infinite;
+}
+
+.hw-device-indicator.offline {
+    background: #555;
+}
+
+.hw-device-info {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.hw-device-info strong {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+}
+
+.hw-device-type {
+    font-size: 0.68rem;
+    color: var(--text-muted);
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1px 6px;
+    border-radius: 3px;
+}
+
+.hw-device-meta {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--text-muted);
+}
+
+.hw-device-sector {
+    font-size: 0.68rem;
+    font-family: var(--font-mono);
+    color: #00d4ff;
+    background: rgba(0, 212, 255, 0.08);
+    padding: 1px 6px;
+    border-radius: 3px;
+}
+
+/* Setup Steps */
+.hw-setup-content {
+    padding: 16px 18px;
+}
+
+.hw-step {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 20px;
+}
+
+.hw-step:last-child {
+    margin-bottom: 0;
+}
+
+.hw-step-num {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.hw-step-content {
+    flex: 1;
+}
+
+.hw-step-content h4 {
+    font-size: 0.82rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.hw-step-content p {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-bottom: 8px;
+}
+
+.hw-step-content code {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 0.72rem;
+    font-family: var(--font-mono);
+}
+
+.hw-input {
+    width: 100%;
+    padding: 8px 12px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+}
+
+.hw-input:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+.hw-code-block {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    overflow-x: auto;
+}
+
+.hw-code-block code {
+    flex: 1;
+    background: none;
+    padding: 0;
+    color: #00e676;
+    white-space: nowrap;
+}
+
+.hw-copy-btn {
+    background: none;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-muted);
+    padding: 4px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    flex-shrink: 0;
+}
+
+.hw-copy-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+}
+
+/* Architecture Diagram */
+.hw-arch-grid {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 24px 18px;
+    flex-wrap: wrap;
+}
+
+.hw-arch-card {
+    text-align: center;
+    padding: 16px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-md);
+    width: 160px;
+}
+
+.hw-arch-icon {
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+}
+
+.hw-arch-card h4 {
+    font-size: 0.78rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.hw-arch-card p {
+    font-size: 0.68rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+}
+
+.hw-arch-arrow {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    flex-shrink: 0;
+}
+
+/* Spin animation for refresh */
+.spin {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@media (max-width: 1000px) {
+    .hw-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hw-arch-grid {
+        flex-direction: column;
+    }
+
+    .hw-arch-arrow {
+        transform: rotate(90deg);
+    }
+}

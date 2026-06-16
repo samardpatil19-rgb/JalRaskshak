@@ -65,6 +65,40 @@ db.exec(`
     resolved INTEGER DEFAULT 0,
     created_at TEXT DEFAULT (datetime('now'))
   );
+
+  CREATE TABLE IF NOT EXISTS devices (
+    id TEXT PRIMARY KEY,
+    type TEXT NOT NULL,
+    status TEXT DEFAULT 'idle',
+    battery REAL DEFAULT 100,
+    trash_collected INTEGER DEFAULT 0,
+    lat REAL NOT NULL,
+    lng REAL NOT NULL,
+    sector TEXT,
+    last_updated TEXT DEFAULT (datetime('now'))
+  );
+
+  CREATE TABLE IF NOT EXISTS missions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    device_id TEXT REFERENCES devices(id),
+    route_id INTEGER REFERENCES routes(id),
+    status TEXT DEFAULT 'active',
+    waypoint_index INTEGER DEFAULT 0,
+    start_time TEXT DEFAULT (datetime('now')),
+    end_time TEXT
+  );
+
+  CREATE TABLE IF NOT EXISTS detections (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    device_id TEXT REFERENCES devices(id),
+    label TEXT NOT NULL,
+    confidence REAL,
+    lat REAL,
+    lng REAL,
+    bbox TEXT,
+    image_path TEXT,
+    timestamp TEXT DEFAULT (datetime('now'))
+  );
 `);
 
 

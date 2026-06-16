@@ -2,8 +2,41 @@ import { Router } from 'express';
 import bcrypt from 'bcryptjs';
 import db from '../db.js';
 import { generateToken, authMiddleware } from '../auth.js';
+import { OAuth2Client } from 'google-auth-library';
+
+const client = new OAuth2Client('414730021498-invo88mfak0fcriogq0r75u9q3cbmd1f.apps.googleusercontent.com');
 
 const router = Router();
+
+// POST /api/auth/google
+router.post('/google', async (req, res) => {
+    const { credential } = req.body;
+    if (!credential) return res.status(400).json({ error: 'Google credential is required' });
+
+    try {
+        const ticket = await client.verifyIdToken({
+            idToken: credential,
+            audience: '414730021498-invo88mfak0fcriogq0r75u9q3cbmd1f.apps.googleusercontent.com',
+        });
+        const payload = ticket.getPayload();
+        const email = payload.email.toLowerCase();
+        const name = payload.name;
+
+        let user = db.prepare('SELECT * FROM users WHERE email = ?').get(email);
+
+        if (!user) {
+            const hash = bcrypt.hashSync(Math.random().toString(36), 10);
+            const result = db.prepare('INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?)').run(name, email, hash);
+            user = { id: result.lastInsertRowid, name, email, role: 'operator' };
+        }
+
+        const token = generateToken(user);
+        res.json({ token, user: { id: user.id, name: user.name, email: user.email, role: user.role } });
+    } catch (err) {
+        console.error('Google Auth Error:', err);
+        res.status(401).json({ error: 'Invalid Google token' });
+    }
+});
 
 // POST /api/auth/register
 router.post('/register', (req, res) => {
